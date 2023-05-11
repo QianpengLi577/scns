@@ -106,32 +106,34 @@ mlab.text3d(x=6.5, y=80.5, z=-2, text='7')
 mlab.text3d(x=9.5, y=80.5, z=-2, text='8')
 mlab.text3d(x=12.5, y=80.5, z=-2, text='9')
 
-# t = mlab.text(0.01, 0.84, 'Type: ML perceptron\nData set: MNIST\nHidden layers: 3\nHidden neurons: 3x1024\nSynapses: 2910992\nSynapses shown: 1%', width=0.15)
+t = mlab.text(0.01, 0.84, 'Type: ML perceptron\nData set: MNIST\nHidden layers: 3\nHidden neurons: 3x1024\nSynapses: 2910992\nSynapses shown: 1%', width=0.15)
 
 mlab.view(azimuth=0, elevation=80, distance=100, focalpoint=[0, 35, 0], reset_roll=False)
 
 # Update the data and view
-@mlab.animate(delay=83, ui=False)
-def anim():
-    for frame in tqdm(list(range(1600))):
-        if frame % 16 == 0:
-            i = frame // 16
-            act_input = activity['input'][i]
-            act_fc1 = activity['fc1'][i]
-            act_fc2 = activity['fc2'][i]
-            act_fc3 = activity['fc3'][i]
-            act_out = activity['fc4'][i]
-            s = np.hstack((
-                act_input.ravel() / act_input.max(),
-                act_fc1 / act_fc1.max(),
-                act_fc2 / act_fc2.max(),
-                act_fc3 / act_fc3.max(),
-                act_out / act_out.max(),
-            ))
-            acts.mlab_source.scalars = s
-            connections.mlab_source.scalars = s
-        mlab.view(azimuth=(frame / 2) % 360, elevation=80, distance=120, focalpoint=[0, 35, 0], reset_roll=False)
-        mlab.savefig(f'/l/vanvlm1/scns/frame{frame:04d}.png')
-        yield
+# @mlab.animate(delay=83, ui=False)
+# def anim():
+for frame in tqdm(list(range(1600))):
+    if frame % 16 == 0:
+        i = frame // 16
+        act_input = activity['input'][i]
+        act_fc1 = activity['fc1'][i]
+        act_fc2 = activity['fc2'][i]
+        act_fc3 = activity['fc3'][i]
+        act_out = activity['fc4'][i]
+        s = np.hstack((
+            act_input.ravel() / act_input.max(),
+            act_fc1 / act_fc1.max(),
+            act_fc2 / act_fc2.max(),
+            act_fc3 / act_fc3.max(),
+            act_out / act_out.max(),
+        ))
+        acts.mlab_source.scalars = s
+        connections.mlab_source.scalars = s
+    mlab.savefig('./pic/frame'+str(frame)+'.png')
+    print('frame'+str(frame)+'.png')
+    mlab.view(azimuth=(frame / 2) % 360, elevation=80, distance=120, focalpoint=[0, 35, 0], reset_roll=False)
+        
+        # yield
 
-anim()
+# anim()

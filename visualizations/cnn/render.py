@@ -113,27 +113,28 @@ mlab.text3d(x=12.5, y=200.5, z=-2, text='9')
 mlab.view(0, 90, 400, [0, 100, 0])
 
 # Update the data and view
-@mlab.animate(delay=83, ui=True)
-def anim():
-    for frame in tqdm(list(range(1600))):
-        if frame % 16 == 0:
-            i = frame // 16
-            img_input.mlab_source.scalars = activity['input'][i][0]
-            for img, a in zip(img_conv1, activity['conv1'][i]):
-                img.mlab_source.scalars = a
-            for img, a in zip(img_conv2, activity['conv2'][i]):
-                img.mlab_source.scalars = a
-            act_fc1 = activity['fc1'][i]
-            act_out = activity['output'][i]
-            s = np.hstack((
-                act_conv2.ravel() / act_conv2.max(),
-                act_fc1 / act_fc1.max(),
-                1 - (act_out / act_out.max())
-            ))
-            acts.mlab_source.scalars = s[len(act_conv2.ravel()):]
-            connections.mlab_source.scalars = s
-        mlab.view(azimuth=(frame / 2) % 360, elevation=80, distance=300, focalpoint=[0, 100, 0], reset_roll=False)
-        mlab.savefig(f'/l/vanvlm1/scns/frame{frame:04d}.png')
-        yield
+# @mlab.animate(delay=83, ui=True)
+# def anim():
+for frame in tqdm(list(range(1600))):
+    if frame % 16 == 0:
+        i = frame // 16
+        img_input.mlab_source.scalars = activity['input'][i][0]
+        for img, a in zip(img_conv1, activity['conv1'][i]):
+            img.mlab_source.scalars = a
+        for img, a in zip(img_conv2, activity['conv2'][i]):
+            img.mlab_source.scalars = a
+        act_fc1 = activity['fc1'][i]
+        act_out = activity['output'][i]
+        s = np.hstack((
+            act_conv2.ravel() / act_conv2.max(),
+            act_fc1 / act_fc1.max(),
+            1 - (act_out / act_out.max())
+        ))
+        acts.mlab_source.scalars = s[len(act_conv2.ravel()):]
+        connections.mlab_source.scalars = s
+    mlab.savefig('pic\\frame'+str(frame)+'.png')
+    mlab.view(azimuth=(frame / 2) % 360, elevation=80, distance=300, focalpoint=[0, 100, 0], reset_roll=False)
+        
+        # yield
 
-anim()
+# anim()
