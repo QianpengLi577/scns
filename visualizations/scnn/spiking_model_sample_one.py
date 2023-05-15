@@ -71,12 +71,15 @@ class SCNN1(nn.Module):
         m2_s = []
         h1_s = []
         h2_s = []
+        sum_s = []
         for step in range(time_window): # simulation time steps
             x = input > torch.rand(input.size(), device=device) # prob. firing
             x_s.append(x.float())
 
             c1_mem, c1_spike = mem_update(self.conv1, x.float(), c1_mem, c1_spike)
             c1_s.append(c1_spike)
+            if c1_spike[0][0].detach().max()!=0:
+                print(c1_mem[0][0].detach().max())
 
             x = F.max_pool2d(c1_spike, 2)
 
@@ -96,8 +99,9 @@ class SCNN1(nn.Module):
             h2_s.append(h2_spike)
 
             h2_sumspike += h2_spike
+            sum_s.append(h2_sumspike)
 
         outputs = h2_sumspike / time_window
-        return outputs , x_s , c1_s , c2_s ,m2_s, h1_s , h2_s
+        return outputs , x_s , c1_s , c2_s ,m2_s, h1_s , h2_s , sum_s
 
 
